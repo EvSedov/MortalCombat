@@ -19,8 +19,8 @@ const player2 = {
 };
 
 const createPlayer = function (className, player) {
-  const $divPlayer1 = document.createElement('div')
-  $divPlayer1.classList.add(className);
+  const $divPlayer = document.createElement('div')
+  $divPlayer.classList.add(className);
   const $divProgressbar = document.createElement('div')
   $divProgressbar.classList.add('progressbar');
   const $divCharacter = document.createElement('div')
@@ -38,11 +38,11 @@ const createPlayer = function (className, player) {
   $divProgressbar.appendChild($divLife)
   $divProgressbar.appendChild($divName);
   $divCharacter.appendChild($img);
-  $divPlayer1.appendChild($divProgressbar)
-  $divPlayer1.appendChild($divCharacter);
+  $divPlayer.appendChild($divProgressbar)
+  $divPlayer.appendChild($divCharacter);
 
   const $divArenas = document.querySelector('.arenas');
-  $divArenas.appendChild($divPlayer1);
+  $divArenas.appendChild($divPlayer);
   
 };
 
