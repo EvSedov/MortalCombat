@@ -65,6 +65,7 @@ function changeHP(player) {
   $playerLife.style.width = player.hp + '%';
 
   if (player.hp <= 0) {
+    $randomButton.disabled = true;
     player.hp = 0;
     $playerLife.style.width = player.hp + '%';
     $divArenas.appendChild(playerLose(player.name));
