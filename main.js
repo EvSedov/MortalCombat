@@ -60,10 +60,13 @@ function playerLose(name) {
 
 function changeHP(player) {
   const $playerLife = document.querySelector(`.player${player.player} .life`);
-  player.hp -= 20;
+  const damage = Math.floor(Math.random() * 21);
+  player.hp -= damage;  
   $playerLife.style.width = player.hp + '%';
 
-  if (player.hp < 0) {
+  if (player.hp <= 0) {
+    player.hp = 0;
+    $playerLife.style.width = player.hp + '%';
     $divArenas.appendChild(playerLose(player.name));
   }
 };
