@@ -62,14 +62,14 @@ function changeHP(player) {
   const $playerLife = document.querySelector(`.player${player.player} .life`);
   const damage = Math.floor(Math.random() * 21);
   player.hp -= damage;  
-  $playerLife.style.width = player.hp + '%';
 
   if (player.hp <= 0) {
     $randomButton.disabled = true;
     player.hp = 0;
-    $playerLife.style.width = player.hp + '%';
     $divArenas.appendChild(playerLose(player.name));
   }
+  
+  $playerLife.style.width = player.hp + '%';
 };
 
 $randomButton.addEventListener('click', function() {
