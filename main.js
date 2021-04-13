@@ -1,4 +1,5 @@
 const $divArenas = document.querySelector('.arenas');
+const $randomButton = document.querySelector('.button');
 
 const player1 = {
   player: 1,
@@ -50,6 +51,31 @@ const createPlayer = function (playerObj) {
 
   return $divPlayer;  
 };
+
+function playerLose(name) {
+  const $loseTitle = createElement('div', 'loseTitle');
+  $loseTitle.innerText = name + ' lose';
+  return $loseTitle;
+};
+
+function changeHP(player) {
+  const $playerLife = document.querySelector(`.player${player.player} .life`);
+  const damage = Math.floor(Math.random() * 21);
+  player.hp -= damage;  
+
+  if (player.hp <= 0) {
+    $randomButton.disabled = true;
+    player.hp = 0;
+    $divArenas.appendChild(playerLose(player.name));
+  }
+  
+  $playerLife.style.width = player.hp + '%';
+};
+
+$randomButton.addEventListener('click', function() {
+  changeHP(player1);
+  changeHP(player2);
+})
 
 $divArenas.appendChild(createPlayer(player1));
 $divArenas.appendChild(createPlayer(player2));
