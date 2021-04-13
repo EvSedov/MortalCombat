@@ -98,6 +98,7 @@ $randomButton.addEventListener('click', function() {
 
   if(player1.hp === 0 || player2.hp === 0) {
     $randomButton.disabled = true;
+    $divArenas.appendChild(createReloadButton());
   }
 
   if (player1.hp === 0 && player1.hp < player2.hp) {
@@ -107,7 +108,18 @@ $randomButton.addEventListener('click', function() {
   } else if (player1.hp === 0 || player2.hp === 0) {
     $divArenas.appendChild(playerWins());
   }
-})
+});
+
+function createReloadButton() {
+  const $divReloadWrap = createElement('div', 'reloadWrap');
+  const $button = createElement('button', 'button');
+  $button.innerText = 'Restart';
+  $button.addEventListener('click', function() {
+    window.location.reload();
+  });
+  $divReloadWrap.appendChild($button);
+  return $divReloadWrap;
+}
 
 $divArenas.appendChild(createPlayer(player1));
 $divArenas.appendChild(createPlayer(player2));
