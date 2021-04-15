@@ -1,6 +1,23 @@
 const $divArenas = document.querySelector('.arenas');
 const $randomButton = document.querySelector('.button');
 
+function changeHP(damage) {
+  this.hp -= damage;  
+
+  if (this.hp <= 0) {
+    this.hp = 0;
+  }
+};
+
+function elHP() {
+  return document.querySelector(`.player${this.player} .life`);
+}
+
+function renderHP() {
+  const $playerLife = this.elHP();
+  $playerLife.style.width = this.hp + '%';
+}
+
 const player1 = {
   player: 1,
   name: 'Subzero',
@@ -9,7 +26,10 @@ const player1 = {
   weapon: ['blade', 'nunchucks'],
   attack: function (name) {
     console.log(name + ' Fight...');
-  }
+  },
+  changeHP,
+  elHP,
+  renderHP,
 };
 
 const player2 = {
@@ -20,7 +40,10 @@ const player2 = {
   weapon: ['trident', 'blade'],
   attack: function (name) {
     console.log(name + ' Fight...');
-  }
+  },
+  changeHP,
+  elHP,
+  renderHP,
 };
 
 function createElement(tag, className) {
@@ -62,28 +85,19 @@ function playerWins(name) {
   return $loseTitle;
 };
 
-function getRandom(numUpInterval) {
-  return Math.floor(Math.random() * (numUpInterval + 1));
-};
-
-function changeHP(player) {
-  const $playerLife = document.querySelector(`.player${player.player} .life`);
-  const damage = getRandom(20);
-  player.hp -= damage;  
-
-  if (player.hp <= 0) {
-    player.hp = 0;
-  }
-  
-  $playerLife.style.width = player.hp + '%';
+function getRandom(numUpperInterval) {
+  return Math.floor(Math.random() * (numUpperInterval + 1));
 };
 
 $randomButton.addEventListener('click', function() {
-  changeHP(player1);
-  changeHP(player2);
+  player1.changeHP(getRandom(20));
+  player1.renderHP();
+  player2.changeHP(getRandom(20));
+  player2.renderHP();
 
   if(player1.hp === 0 || player2.hp === 0) {
     $randomButton.disabled = true;
+    $divArenas.appendChild(createReloadButton());
   }
 
   if (player1.hp === 0 && player1.hp < player2.hp) {
@@ -93,7 +107,18 @@ $randomButton.addEventListener('click', function() {
   } else if (player1.hp === 0 || player2.hp === 0) {
     $divArenas.appendChild(playerWins());
   }
-})
+});
+
+function createReloadButton() {
+  const $divReloadWrap = createElement('div', 'reloadWrap');
+  const $button = createElement('button', 'button');
+  $button.innerText = 'Restart';
+  $button.addEventListener('click', function() {
+    window.location.reload();
+  });
+  $divReloadWrap.appendChild($button);
+  return $divReloadWrap;
+}
 
 $divArenas.appendChild(createPlayer(player1));
 $divArenas.appendChild(createPlayer(player2));
