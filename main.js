@@ -123,6 +123,16 @@ function enemyAttack() {
   }
 }
 
+function showWiner() {
+  if (player1.hp === 0 && player1.hp < player2.hp) {
+    $divArenas.appendChild(playerWins(player2.name));
+  } else if (player2.hp === 0 && player2.hp < player1.hp) {
+    $divArenas.appendChild(playerWins(player1.name));
+  } else if (player1.hp === 0 || player2.hp === 0) {
+    $divArenas.appendChild(playerWins());
+  }
+};
+
 $formFight.addEventListener('submit', function(e) {
   e.preventDefault();
   const enemy = enemyAttack();
@@ -140,21 +150,18 @@ $formFight.addEventListener('submit', function(e) {
     item.checked = false;
   }
   
-  enemy.hit === attack.defence ? player1.changeHP(0) : player1.changeHP(enemy.value);
-  player1.renderHP();
-  attack.hit === enemy.defence ? player2.changeHP(0) : player2.changeHP(attack.value);
-  player2.renderHP();
+  if (enemy.hit !== attack.defence) {
+    player1.changeHP(enemy.value);
+    player1.renderHP();
+  }
+  
+  if (attack.hit !== enemy.defence) {
+    player2.changeHP(attack.value);
+    player2.renderHP();
+  }
 
   if(player1.hp === 0 || player2.hp === 0) {
     createReloadButton();
   }
-
-  if (player1.hp === 0 && player1.hp < player2.hp) {
-    $divArenas.appendChild(playerWins(player2.name));
-  } else if (player2.hp === 0 && player2.hp < player1.hp) {
-    $divArenas.appendChild(playerWins(player1.name));
-  } else if (player1.hp === 0 || player2.hp === 0) {
-    $divArenas.appendChild(playerWins());
-  }
-
+  showWiner();
 })
