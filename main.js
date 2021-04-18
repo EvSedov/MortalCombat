@@ -98,26 +98,6 @@ function getRandom(numUpperInterval) {
   return Math.floor(Math.random() * (numUpperInterval + 1));
 };
 
-// $randomButton.addEventListener('click', function() {
-//   player1.changeHP(getRandom(20));
-//   player1.renderHP();
-//   player2.changeHP(getRandom(20));
-//   player2.renderHP();
-
-//   if(player1.hp === 0 || player2.hp === 0) {
-//     $randomButton.disabled = true;
-//     createReloadButton();
-//   }
-
-//   if (player1.hp === 0 && player1.hp < player2.hp) {
-//     $divArenas.appendChild(playerWins(player2.name));
-//   } else if (player2.hp === 0 && player2.hp < player1.hp) {
-//     $divArenas.appendChild(playerWins(player1.name));
-//   } else if (player1.hp === 0 || player2.hp === 0) {
-//     $divArenas.appendChild(playerWins());
-//   }
-// });
-
 function createReloadButton() {
   const $divReloadWrap = createElement('div', 'reloadWrap');
   const $button = createElement('button', 'button');
@@ -143,6 +123,16 @@ function enemyAttack() {
   }
 }
 
+function showWiner() {
+  if (player1.hp === 0 && player1.hp < player2.hp) {
+    $divArenas.appendChild(playerWins(player2.name));
+  } else if (player2.hp === 0 && player2.hp < player1.hp) {
+    $divArenas.appendChild(playerWins(player1.name));
+  } else if (player1.hp === 0 || player2.hp === 0) {
+    $divArenas.appendChild(playerWins());
+  }
+};
+
 $formFight.addEventListener('submit', function(e) {
   e.preventDefault();
   const enemy = enemyAttack();
@@ -159,8 +149,19 @@ $formFight.addEventListener('submit', function(e) {
     
     item.checked = false;
   }
-  console.log("🚀 ~ file: main.js ~ line 158 ~ $formFight.addEventListener ~ attack", attack)
-  console.log("🚀 ~ file: main.js ~ line 149 ~ $formFight.addEventListener ~ enemy", enemy)
-
   
+  if (enemy.hit !== attack.defence) {
+    player1.changeHP(enemy.value);
+    player1.renderHP();
+  }
+  
+  if (attack.hit !== enemy.defence) {
+    player2.changeHP(attack.value);
+    player2.renderHP();
+  }
+
+  if(player1.hp === 0 || player2.hp === 0) {
+    createReloadButton();
+  }
+  showWiner();
 })
