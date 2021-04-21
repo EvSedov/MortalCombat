@@ -1,4 +1,4 @@
-import logs from "./logs.js";
+import { logs } from "./logs.js";
 
 const $divArenas = document.querySelector('.arenas');
 // const $randomButton = document.querySelector('.button');
@@ -107,6 +107,7 @@ const createReloadButton = () => {
   $divReloadWrap.appendChild($button);
   $divArenas.appendChild($divReloadWrap);
 };
+
 
 $divArenas.appendChild(createPlayer(player1));
 $divArenas.appendChild(createPlayer(player2));
