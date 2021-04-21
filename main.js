@@ -1,4 +1,5 @@
-import { logs } from "./logs.js";
+import { generateLogs } from "./logs.js";
+import { getRandom } from './utils.js';
 
 const $divArenas = document.querySelector('.arenas');
 // const $randomButton = document.querySelector('.button');
@@ -13,7 +14,7 @@ const HIT = {
 };
 const ATTACK = ['head', 'body', 'foot'];
 
-const changeHP = (damage) => {
+function changeHP (damage) {
   this.hp -= damage;  
 
   if (this.hp <= 0) {
@@ -21,9 +22,11 @@ const changeHP = (damage) => {
   }
 };
 
-const elHP = () => document.querySelector(`.player${this.player} .life`);
+function elHP () {
+  return document.querySelector(`.player${this.player} .life`);
+};
 
-const renderHP = () => {
+function renderHP () {
   const $playerLife = this.elHP();
   $playerLife.style.width = this.hp + '%';
 }
@@ -95,8 +98,6 @@ const playerWins = (name) => {
   return $loseTitle;
 };
 
-const getRandom = (numUpperInterval) => Math.floor(Math.random() * (numUpperInterval + 1));
-
 const createReloadButton = () => {
   const $divReloadWrap = createElement('div', 'reloadWrap');
   const $button = createElement('button', 'button');
@@ -137,66 +138,20 @@ const playerAttack = () => {
     item.checked = false;
   }
   return attack;
-}
-
-const generateLogs = (type, playerAttack, playerDefence) => {
-  const date = new Date();
-  const hour = date.getHours();
-  const minute = date.getMinutes();
-  const second = date.getSeconds();
-  const time = `${hour}:${minute}:${second}`;
-  let idxRnd,
-      text,
-      $el;
-  switch (type) {
-    case 'start':
-      text = logs[type]
-               .replace('[time]', time)
-               .replace('[player1]', playerAttack.name)
-               .replace('[player2]', playerDefence.name);
-      $el = `<p>${text}</p>`;
-      break;
-    case 'hit':
-      idxRnd = getRandom(17);
-      text = logs[type][idxRnd]
-               .replace('[playerKick]', playerAttack.name)
-               .replace('[playerDefence]', playerDefence.name);
-      $el = `<p>${time} -> ${text} Уровень жизни ${playerDefence.name} -> ${playerDefence.hp} </p>`;
-      break;
-    case 'defence':
-      idxRnd = getRandom(7);
-      text = logs[type][idxRnd]
-               .replace('[playerKick]', playerAttack.name)
-               .replace('[playerDefence]', playerDefence.name);
-      $el = `<p>${time} -> ${text} Уровень жизни ${playerDefence.name} -> ${playerDefence.hp}</p>`;
-      break;
-    case 'draw':
-      text = logs[type];
-      $el = `<p>${time} -> ${text}</p>`;
-    case 'end':
-      idxRnd =getRandom(2);
-      text = logs[type][idxRnd]
-               .replace('[playerWins]', playerAttack.name)
-               .replace('[playerLose]', playerDefence.name);
-      $el = `<p>${time} -> ${text}</p>`;
-      break;
-    default:
-      idxRnd = 0;
-  }
-  $chat.insertAdjacentHTML('afterbegin', $el);
 };
 
-window.onload = generateLogs('start', player1, player2);
+
+window.onload = $chat.insertAdjacentHTML('afterbegin', generateLogs('start', player1, player2));
 
 const showWiner = () => {
   if (player1.hp === 0 && player1.hp < player2.hp) {
-    generateLogs('end', player2, player1);
+    $chat.insertAdjacentHTML('afterbegin', generateLogs('end', player2, player1));
     $divArenas.appendChild(playerWins(player2.name));
   } else if (player2.hp === 0 && player2.hp < player1.hp) {
-    generateLogs('end', player1, player2);
+    $chat.insertAdjacentHTML('afterbegin', generateLogs('end', player1, player2));
     $divArenas.appendChild(playerWins(player1.name));
   } else if (player1.hp === 0 && player2.hp === 0) {
-    generateLogs('draw');
+    $chat.insertAdjacentHTML('afterbegin', generateLogs('draw'));
     $divArenas.appendChild(playerWins());
   }
 };
@@ -211,15 +166,15 @@ $formFight.addEventListener('submit', function(e) {
     player1.renderHP();
     generateLogs('hit', player2, player1);
   } else {
-    generateLogs('defence', player2, player1);
+    $chat.insertAdjacentHTML('afterbegin', generateLogs('defence', player2, player1));
   }
   
   if (attack.hit !== enemy.defence) {
     player2.changeHP(attack.value);
     player2.renderHP();
-    generateLogs('hit', player1, player2);
+    $chat.insertAdjacentHTML('afterbegin', generateLogs('hit', player1, player2));
   } else {
-    generateLogs('defence', player1, player2);
+    $chat.insertAdjacentHTML('afterbegin', generateLogs('defence', player1, player2));
   }
 
   if(player1.hp === 0 || player2.hp === 0) {
