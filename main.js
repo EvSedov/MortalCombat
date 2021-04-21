@@ -1,3 +1,5 @@
+import logs from "./logs.js";
+
 const $divArenas = document.querySelector('.arenas');
 // const $randomButton = document.querySelector('.button');
 
@@ -11,7 +13,7 @@ const HIT = {
 };
 const ATTACK = ['head', 'body', 'foot'];
 
-function changeHP(damage) {
+const changeHP = (damage) => {
   this.hp -= damage;  
 
   if (this.hp <= 0) {
@@ -19,11 +21,9 @@ function changeHP(damage) {
   }
 };
 
-function elHP() {
-  return document.querySelector(`.player${this.player} .life`);
-}
+const elHP = () => document.querySelector(`.player${this.player} .life`);
 
-function renderHP() {
+const renderHP = () => {
   const $playerLife = this.elHP();
   $playerLife.style.width = this.hp + '%';
 }
@@ -56,7 +56,7 @@ const player2 = {
   renderHP,
 };
 
-function createElement(tag, className) {
+const createElement = (tag, className) => {
   const $tag = document.createElement(tag);
   if (className) {
     $tag.classList.add(className);
@@ -64,7 +64,7 @@ function createElement(tag, className) {
   return $tag;
 }
 
-const createPlayer = function (playerObj) {
+const createPlayer = (playerObj) => {
   const $divPlayer = createElement('div', 'player' + playerObj.player)
   const $divProgressbar = createElement('div', 'progressbar')
   const $divCharacter = createElement('div', 'character')
@@ -85,7 +85,7 @@ const createPlayer = function (playerObj) {
   return $divPlayer;  
 };
 
-function playerWins(name) {
+const playerWins = (name) => {
   const $loseTitle = createElement('div', 'loseTitle');
   if (name) {
     $loseTitle.innerText = name + ' wins';
@@ -95,11 +95,9 @@ function playerWins(name) {
   return $loseTitle;
 };
 
-function getRandom(numUpperInterval) {
-  return Math.floor(Math.random() * (numUpperInterval + 1));
-};
+const getRandom = (numUpperInterval) => Math.floor(Math.random() * (numUpperInterval + 1));
 
-function createReloadButton() {
+const createReloadButton = () => {
   const $divReloadWrap = createElement('div', 'reloadWrap');
   const $button = createElement('button', 'button');
   $button.innerText = 'Restart';
@@ -108,12 +106,12 @@ function createReloadButton() {
   });
   $divReloadWrap.appendChild($button);
   $divArenas.appendChild($divReloadWrap);
-}
+};
 
 $divArenas.appendChild(createPlayer(player1));
 $divArenas.appendChild(createPlayer(player2));
 
-function enemyAttack() {
+const enemyAttack = () => {
   const hit = ATTACK[getRandom(2)];  
   const defence = ATTACK[getRandom(2)];
 
@@ -124,7 +122,7 @@ function enemyAttack() {
   }
 };
 
-function playerAttack() {
+const playerAttack = () => {
   const attack = {};
   for (let item of $formFight) {
     if (item.checked && item.name === 'hit') {
@@ -140,7 +138,7 @@ function playerAttack() {
   return attack;
 }
 
-function generateLogs(type, playerAttack, playerDefence) {
+const generateLogs = (type, playerAttack, playerDefence) => {
   const date = new Date();
   const hour = date.getHours();
   const minute = date.getMinutes();
@@ -189,7 +187,7 @@ function generateLogs(type, playerAttack, playerDefence) {
 
 window.onload = generateLogs('start', player1, player2);
 
-function showWiner() {
+const showWiner = () => {
   if (player1.hp === 0 && player1.hp < player2.hp) {
     generateLogs('end', player2, player1);
     $divArenas.appendChild(playerWins(player2.name));
@@ -227,4 +225,4 @@ $formFight.addEventListener('submit', function(e) {
     createReloadButton();
     showWiner();
   }
-})
+});
