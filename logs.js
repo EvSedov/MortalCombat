@@ -1,3 +1,5 @@
+import { getRandom } from './utils.js';
+
 const logs = {
     start: 'Часы показывали [time], когда [player1] и [player2] бросили вызов друг другу.',
     end: [
@@ -36,4 +38,52 @@ const logs = {
         '[playerKick] обманулся и жестокий [playerDefence] блокировал удар стопой в солнечное сплетение.'
     ],
     draw: 'Ничья - это тоже победа!'
+};
+
+export const generateLogs = (type, playerAttack, playerDefence) => {
+  const date = new Date();
+  const hour = date.getHours();
+  const minute = date.getMinutes();
+  const second = date.getSeconds();
+  const time = `${hour}:${minute}:${second}`;
+  let idxRnd,
+      text,
+      $el;
+  switch (type) {
+    case 'start':
+      text = logs[type]
+               .replace('[time]', time)
+               .replace('[player1]', playerAttack.name)
+               .replace('[player2]', playerDefence.name);
+      $el = `<p>${text}</p>`;
+      break;
+    case 'hit':
+      idxRnd = getRandom(17);
+      text = logs[type][idxRnd]
+               .replace('[playerKick]', playerAttack.name)
+               .replace('[playerDefence]', playerDefence.name);
+      $el = `<p>${time} -> ${text} Уровень жизни ${playerDefence.name} -> ${playerDefence.hp} </p>`;
+      break;
+    case 'defence':
+      idxRnd = getRandom(7);
+      text = logs[type][idxRnd]
+               .replace('[playerKick]', playerAttack.name)
+               .replace('[playerDefence]', playerDefence.name);
+      $el = `<p>${time} -> ${text} Уровень жизни ${playerDefence.name} -> ${playerDefence.hp}</p>`;
+      break;
+    case 'draw':
+      text = logs[type];
+      $el = `<p>${time} -> ${text}</p>`;
+    case 'end':
+      idxRnd =getRandom(2);
+      text = logs[type][idxRnd]
+               .replace('[playerWins]', playerAttack.name)
+               .replace('[playerLose]', playerDefence.name);
+      $el = `<p>${time} -> ${text}</p>`;
+      break;
+    default:
+      idxRnd = 0;
+      break;
+  }
+  return $el;
 };

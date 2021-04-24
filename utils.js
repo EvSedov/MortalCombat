@@ -1,0 +1,1 @@
+export const getRandom = (numUpperInterval) => Math.floor(Math.random() * (numUpperInterval + 1));
