@@ -2,6 +2,7 @@ const $divArenas = document.querySelector('.arenas');
 // const $randomButton = document.querySelector('.button');
 
 const $formFight = document.querySelector('.control');
+const $chat = document.querySelector('.chat');
 
 const HIT = {
   head: 30,
@@ -121,23 +122,10 @@ function enemyAttack() {
     defence,
     hit,
   }
-}
-
-function showWiner() {
-  if (player1.hp === 0 && player1.hp < player2.hp) {
-    $divArenas.appendChild(playerWins(player2.name));
-  } else if (player2.hp === 0 && player2.hp < player1.hp) {
-    $divArenas.appendChild(playerWins(player1.name));
-  } else if (player1.hp === 0 || player2.hp === 0) {
-    $divArenas.appendChild(playerWins());
-  }
 };
 
-$formFight.addEventListener('submit', function(e) {
-  e.preventDefault();
-  const enemy = enemyAttack();
+function playerAttack() {
   const attack = {};
-  
   for (let item of $formFight) {
     if (item.checked && item.name === 'hit') {
       attack.value = getRandom(HIT[item.value]);
@@ -149,19 +137,94 @@ $formFight.addEventListener('submit', function(e) {
     
     item.checked = false;
   }
+  return attack;
+}
+
+function generateLogs(type, playerAttack, playerDefence) {
+  const date = new Date();
+  const hour = date.getHours();
+  const minute = date.getMinutes();
+  const second = date.getSeconds();
+  const time = `${hour}:${minute}:${second}`;
+  let idxRnd,
+      text,
+      $el;
+  switch (type) {
+    case 'start':
+      text = logs[type]
+               .replace('[time]', time)
+               .replace('[player1]', playerAttack.name)
+               .replace('[player2]', playerDefence.name);
+      $el = `<p>${text}</p>`;
+      break;
+    case 'hit':
+      idxRnd = getRandom(17);
+      text = logs[type][idxRnd]
+               .replace('[playerKick]', playerAttack.name)
+               .replace('[playerDefence]', playerDefence.name);
+      $el = `<p>${time} -> ${text} Уровень жизни ${playerDefence.name} -> ${playerDefence.hp} </p>`;
+      break;
+    case 'defence':
+      idxRnd = getRandom(7);
+      text = logs[type][idxRnd]
+               .replace('[playerKick]', playerAttack.name)
+               .replace('[playerDefence]', playerDefence.name);
+      $el = `<p>${time} -> ${text} Уровень жизни ${playerDefence.name} -> ${playerDefence.hp}</p>`;
+      break;
+    case 'draw':
+      text = logs[type];
+      $el = `<p>${time} -> ${text}</p>`;
+    case 'end':
+      idxRnd =getRandom(2);
+      text = logs[type][idxRnd]
+               .replace('[playerWins]', playerAttack.name)
+               .replace('[playerLose]', playerDefence.name);
+      $el = `<p>${time} -> ${text}</p>`;
+      break;
+    default:
+      idxRnd = 0;
+  }
+  $chat.insertAdjacentHTML('afterbegin', $el);
+};
+
+window.onload = generateLogs('start', player1, player2);
+
+function showWiner() {
+  if (player1.hp === 0 && player1.hp < player2.hp) {
+    generateLogs('end', player2, player1);
+    $divArenas.appendChild(playerWins(player2.name));
+  } else if (player2.hp === 0 && player2.hp < player1.hp) {
+    generateLogs('end', player1, player2);
+    $divArenas.appendChild(playerWins(player1.name));
+  } else if (player1.hp === 0 && player2.hp === 0) {
+    generateLogs('draw');
+    $divArenas.appendChild(playerWins());
+  }
+};
+
+$formFight.addEventListener('submit', function(e) {
+  e.preventDefault();
+  const enemy = enemyAttack();
+  const attack = playerAttack();
   
   if (enemy.hit !== attack.defence) {
     player1.changeHP(enemy.value);
     player1.renderHP();
+    generateLogs('hit', player2, player1);
+  } else {
+    generateLogs('defence', player2, player1);
   }
   
   if (attack.hit !== enemy.defence) {
     player2.changeHP(attack.value);
     player2.renderHP();
+    generateLogs('hit', player1, player2);
+  } else {
+    generateLogs('defence', player1, player2);
   }
 
   if(player1.hp === 0 || player2.hp === 0) {
     createReloadButton();
+    showWiner();
   }
-  showWiner();
 })
