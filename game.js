@@ -1,6 +1,6 @@
 import { generateLogs } from "./logs.js";
 import { createReloadButton, playerWins, createPlayer } from './elements-for-game.js';
-import { enemyAttack, playerAttack } from './game-functions.js';
+import { enemyAttack, playerAttack } from './utils.js';
 import { player1, player2 } from './players.js';
 
 export class Game {
