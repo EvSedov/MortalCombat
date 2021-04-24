@@ -83,6 +83,7 @@ export const generateLogs = (type, playerAttack, playerDefence) => {
       break;
     default:
       idxRnd = 0;
+      break;
   }
   return $el;
 };
