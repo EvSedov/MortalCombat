@@ -1,9 +1,8 @@
 import { generateLogs } from "./logs.js";
 import { getRandom } from './utils.js';
+import { Player } from './player.js';
 
 const $divArenas = document.querySelector('.arenas');
-// const $randomButton = document.querySelector('.button');
-
 const $formFight = document.querySelector('.control');
 const $chat = document.querySelector('.chat');
 
@@ -14,50 +13,24 @@ const HIT = {
 };
 const ATTACK = ['head', 'body', 'foot'];
 
-function changeHP (damage) {
-  this.hp -= damage;  
 
-  if (this.hp <= 0) {
-    this.hp = 0;
-  }
-};
 
-function elHP () {
-  return document.querySelector(`.player${this.player} .life`);
-};
-
-function renderHP () {
-  const $playerLife = this.elHP();
-  $playerLife.style.width = this.hp + '%';
-}
-
-const player1 = {
+const player1 = new Player({
   player: 1,
   name: 'Subzero',
   hp: 100,
   img: 'http://reactmarathon-api.herokuapp.com/assets/subzero.gif',
   weapon: ['blade', 'nunchucks'],
-  attack: function (name) {
-    console.log(name + ' Fight...');
-  },
-  changeHP,
-  elHP,
-  renderHP,
-};
+});
 
-const player2 = {
+const player2 = new Player({
   player: 2,
   name: 'Scorpion',
   hp: 100,
   img: 'http://reactmarathon-api.herokuapp.com/assets/scorpion.gif',
   weapon: ['trident', 'blade'],
-  attack: function (name) {
-    console.log(name + ' Fight...');
-  },
-  changeHP,
-  elHP,
-  renderHP,
-};
+});
+console.log("🚀 ~ file: main.js ~ line 33 ~ player2", player2)
 
 const createElement = (tag, className) => {
   const $tag = document.createElement(tag);
