@@ -1,11 +1,11 @@
+import { getRandom } from './utils.js';
+
 const HIT = {
   head: 30,
   body: 25,
   foot: 20,
 };
 const ATTACK = ['head', 'body', 'foot'];
-
-export const getRandom = (numUpperInterval) => Math.floor(Math.random() * (numUpperInterval + 1));
 
 export const enemyAttack = () => {
   const hit = ATTACK[getRandom(2)];  
